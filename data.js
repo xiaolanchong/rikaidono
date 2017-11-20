@@ -830,7 +830,7 @@ var rcxData = {
 			var k;
 
 			for (i = 0; i < entry.data.length; ++i) {
-				console.log(entry.data[i][0]);
+				//console.log(entry.data[i][0]);
 				e = entry.data[i][0].match(/^(.+?)\s+(?:\[(.*?)\])?\s*\/([\S\s]+)\//);
 				if (!e) continue;
 

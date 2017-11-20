@@ -81,14 +81,6 @@ var rcxMain = {
   freqDB: null,                 // Frequency database connection
   pitchDB: null,                // Pitch accent database connection
 
-	getBrowserTB: function() {
-		if (rcxMain.tabMail) return rcxMain.tabMail.getBrowserForSelectedTab();
-		return document.getElementById('messagepane') || document.getElementById('content-frame');
-	},
-
-	getBrowserFF: function() {
-		return null;//gBrowser.mCurrentBrowser;
-	},
 
 	global: function() {
 		return null;
@@ -102,9 +94,9 @@ var rcxMain = {
 	tbObs: {
 		observe: function(subject, topic, data) {
 			if (topic == 'mail:composeOnSend') {
-				var e = window.content.document.getElementById('rikaichan-css');
+				var e = document.getElementById('rikaichan-css');
 				if (e) e.parentNode.removeChild(e);
-				e = window.content.document.getElementById('rikaichan-window');
+				e = document.getElementById('rikaichan-window');
 				if (e) e.parentNode.removeChild(e);
 			}
 		},
@@ -170,9 +162,9 @@ var rcxMain = {
 	tbObs: {
 		observe: function(subject, topic, data) {
 			if (topic == 'mail:composeOnSend') {
-				var e = window.content.document.getElementById('rikaichan-css');
+				var e = document.getElementById('rikaichan-css');
 				if (e) e.parentNode.removeChild(e);
-				e = window.content.document.getElementById('rikaichan-window');
+				e = document.getElementById('rikaichan-window');
 				if (e) e.parentNode.removeChild(e);
 			}
 		},
@@ -208,10 +200,9 @@ var rcxMain = {
    // getBrowser: function() { return document; }, // new
     if (true) {
 			let docID = document.documentElement.id;
-			this.isTB = ((docID == "messengerWindow") || (docID == "msgcomposeWindow"));
+			this.isTB = false;
 
-			let mks = this.isTB ? (document.getElementById('mailKeys') || document.getElementById('editorKeys')) :
-						document.getElementById('mainKeyset') || document.getElementById('navKeys');
+			let mks = document.getElementById('mainKeyset') || document.getElementById('navKeys');
 			if (mks) {
 				let prefs = new rcxPrefs();
 				['toggle', 'lbar'].forEach(function(name) {
@@ -234,20 +225,6 @@ var rcxMain = {
 		rcxConfig.load();
 		rcxConfig.observer.start();
 
-		if (this.isTB) {
-			this.getBrowser = function() {
-				//if (rcxMain.tabMail) return rcxMain.tabMail.getBrowserForSelectedTab();
-				return document.getElementById('messagepane') || document.getElementById('content-frame');
-			}
-
-			this.tabMail = document.getElementById('tabmail');
-			if (this.tabMail) {
-				this.tabMail.registerTabMonitor(this.tbTabMonitor);
-			}
-
-			this.tbObs.register();
-		}
-		else {
 			this.getBrowser = function() { return document; }
 
 		//	gBrowser.mTabContainer.addEventListener('select', this.onTabSelect, false);
@@ -260,16 +237,6 @@ var rcxMain = {
 					this.onTabSelect();
 				}
 			}
-
-
-    // Needed to write asynchronously to file in the sendToAnki routine
-//    Components.utils.import("resource://gre/modules/FileUtils.jsm");
-  //  Components.utils.import("resource://gre/modules/NetUtil.jsm");
-
-    // Needed to download the audio file
-  //  Components.utils.import("resource://gre/modules/Downloads.jsm");
-  //  Components.utils.import("resource://gre/modules/osfile.jsm")
-  //  Components.utils.import("resource://gre/modules/Task.jsm");
 
 			// add icon to the toolbar
 			try {
@@ -285,7 +252,6 @@ var rcxMain = {
 				}
 			}
 			catch (ex) { }
-		}
 
 		this.checkVersion();
 
@@ -362,15 +328,9 @@ var rcxMain = {
 	onUnload: function() {
 		this.rcxObs.unregister();
 		rcxConfig.observer.stop();
-		if (this.isTB) {
-			if (this.tabMail) {
-				this.tabMail.unregisterTabMonitor(this.tbTabMonitor);
-			}
-			this.tbObs.unregister();
-		}
-		else {
+
 		//	gBrowser.mTabContainer.removeEventListener('select', this.onTabSelect, false);
-		}
+
 	},
 
 	initDictionary: function() {
@@ -393,14 +353,8 @@ var rcxMain = {
 	showDownloadPage: function() {
 		const url = 'http://www.polarcloud.com/getrcx/?version=' + (this.version || '');
 		try {
-			if (this.isTB) {
-			//	Components.classes['@mozilla.org/messenger;1'].createInstance()
-			//		.QueryInterface(Components.interfaces.nsIMessenger)
-			//		.launchExternalURL(url);
-			}
-			else {
+
 			//	gBrowser.selectedTab = gBrowser.addTab(url);
-			}
 		}
 		catch (ex) {
 			alert('There was an error opening ' + url);
@@ -424,11 +378,7 @@ var rcxMain = {
 	_onTabSelect: function() {
 		var bro = this.getBrowser();
 
-		if (this.isTB) {
-			if (this.enabled) this.enable(bro, 0);
-				else this.disable(bro);
-		}
-		else if ((rcxConfig.enmode > 0) && (this.enabled == 1) && (bro.rikaichan == null)) {
+		if ((rcxConfig.enmode > 0) && (this.enabled == 1) && (bro.rikaichan == null)) {
 			this.enable(bro, 0);
 		}
 
@@ -460,13 +410,13 @@ var rcxMain = {
     try
     {
       // outer-most document
-      var content = this.isTB ? this.getBrowser().contentWindow : window.content;
-      var topdoc = content.document;
+      var content = window;
+      var topdoc = document;
 
       var x = 0, y = 0;
       if (pos) {
-        x = pos.screenX;
-        y = pos.screenY;
+        x = pos.clientX;
+        y = pos.clientY;
       }
 
       this.lbPop = lbPop;
@@ -562,7 +512,6 @@ var rcxMain = {
           height += 25;
         }
 
-		//console.log('altView ' + this.altView);
         if (this.altView == 1) {
           // upper-left
           x = 0;
@@ -574,11 +523,6 @@ var rcxMain = {
           y = (content.innerHeight - (height + 20));
         }
         else {
-          // convert xy relative to outer-most document
-          var cb = this.getBrowser();
-          var bo = window;//cb.boxObject; <-- changed
-          x -= bo.screenX;
-          y -= bo.screenY;
 
           // when zoomed, convert to zoomed document pixel position
           // - not in TB compose and ...?
@@ -649,13 +593,13 @@ var rcxMain = {
       popup.style.left = (x + content.scrollX) + 'px';
       popup.style.top = (y + content.scrollY) + 'px';
       popup.style.display = '';
-	  console.log('top ' + popup.style.top + ' ' + content.scrollY);
+	 // console.log('top ' + popup.style.top + ' ' + content.scrollY);
     }
     catch(ex)
     {
       console.error("showPopup() Exception: " + ex);
     }
-	console.log('showPopup end');
+	//console.log('showPopup end');
 	},
 
 	hidePopup: function()
@@ -670,7 +614,7 @@ var rcxMain = {
     {
       this.superStickyOkayToHide = false;
 
-		  var doc = this.isTB ? new XPCNativeWrapper(this.getBrowser().contentDocument) : window.content.document;
+		  var doc = document;
 		  var popup = doc.getElementById('rikaichan-window');
 
       if (popup)
@@ -702,7 +646,7 @@ var rcxMain = {
 	},
 
 	isVisible: function() {
-		var doc = this.isTB ? this.getBrowser().contentDocument : window.content.document;
+		var doc = document;
 		var popup = doc.getElementById('rikaichan-window');
 		return (popup) && (popup.style.display != 'none');
 	},
@@ -3519,7 +3463,7 @@ var rcxMain = {
 	},
 
 	show: function(tdata) {
-		console.log('show');
+		//console.log('show');
 		var rp = tdata.prevRangeNode; // The currently selected node
 		var ro = tdata.prevRangeOfs + tdata.uofs; // The position of the hilited text in the currently selected node
 		var i;
@@ -3769,9 +3713,16 @@ var rcxMain = {
 	onMouseMove: function(ev) { rcxMain._onMouseMove(ev); },
 	_onMouseMove: function(ev) {
 		var tdata = ev.currentTarget.rikaichan;	// per-tab data
-		var rp = ev.rangeParent;
-		var ro = ev.rangeOffset;
-
+		var rp = null;
+		var ro = -1;
+		if(document.caretRangeFromPoint) {  // Webkit
+			const rrange = document.caretRangeFromPoint(ev.x, ev.y);
+			rp = rrange.startContainer;
+			ro = rrange.startOffset;
+		} else {                           // Mozilla
+			rp = ev.rangeParent;
+			ro = ev.rangeOffset;
+		}
 /*
 		var cb = this.getBrowser();
 		var bbo = cb.boxObject;
@@ -3797,7 +3748,8 @@ var rcxMain = {
 			tdata.timer = null;
 		}
 
-		if ((ev.explicitOriginalTarget.nodeType != Node.TEXT_NODE) && !('form' in ev.target)) {
+		//ev.explicitOriginalTarget = ev.explicitOriginalTarget || ev.target;
+		if ((ev.explicitOriginalTarget != undefined && ev.explicitOriginalTarget.nodeType != Node.TEXT_NODE) && !('form' in ev.target)) {
 			rp = null;
 			ro = -1;
 		}
@@ -3815,7 +3767,8 @@ var rcxMain = {
 		if ((rp) && (rp.data) && (ro < rp.data.length)) {
 			rcxData.select(ev.shiftKey ? rcxData.kanjiPos : 0);
 			//	tdata.pos = ev;
-			tdata.pos = { screenX: ev.screenX, screenY: ev.screenY, pageX: ev.pageX, pageY: ev.pageY };
+			tdata.pos = { screenX: ev.screenX, screenY: ev.screenY, pageX: ev.pageX, pageY: ev.pageY,
+						  clientX: ev.clientX, clientY: ev.clientY};
 			tdata.timer = setTimeout(function() { rcxMain.show(tdata) }, rcxConfig.popdelay);
 			return;
 		}
@@ -3857,7 +3810,7 @@ var rcxMain = {
 	},
 
 	cursorInPopup: function(pos) {
-		var doc = this.isTB ? this.getBrowser().contentDocument : window.content.document;
+		var doc = document;
 		var popup = doc.getElementById('rikaichan-window');
 		return (popup && (popup.style.display !== 'none') &&
 			(pos.pageX >= popup.offsetLeft) &&
@@ -3883,11 +3836,6 @@ var rcxMain = {
 	enable: function(b, mode) {
 		//if (!this.initDictionary()) return;
 		var ok = this._enable(b, mode);
-
-		if (this.isTB) {
-			this._enable(document.getElementById('multimessage'));
-			this._enable(document.getElementById('messagepane'));
-		}
 
 		if (ok) {
 			if (mode == 1) {
@@ -3972,12 +3920,7 @@ var rcxMain = {
 
 	disable: function(b, mode) {
 		this._disable(b);
-		if (this.isTB) {
-			this.enabled = 0;
-			this._disable(document.getElementById('multimessage'));
-			this._disable(document.getElementById('messagepane'));
-		}
-		else if (this.enabled) {
+		if (this.enabled) {
 			this.enabled = 0;
 /*
 			for (var i = 0; i < gBrowser.browsers.length; ++i) {
@@ -4259,10 +4202,7 @@ var rcxConfig = {
 
 		rcxConfig.css = (rcxConfig.css.indexOf('/') == -1) ? ('popup-' + rcxConfig.css + '.css') : rcxConfig.css;
 		//rcxConfig.css = '';
-	/*	if (rcxMain.isTB) {
-			rcxConfig.enmode = 1;
-		}
-		else {
+	/*	 {
 			for (let i = gBrowser.browsers.length - 1; i >= 0; --i) {
 				let e = gBrowser.browsers[i].contentDocument.getElementById('rikaichan-css');
 				if (e) e.setAttribute('href', rcxConfig.css);
