@@ -16,7 +16,7 @@
 	text-transform: none;
 	white-space: normal;
 	word-spacing: normal;
-	font: normal 14px sans-serif;
+	font: small sans-serif;
 	visibility: visible;
 }
 
@@ -34,47 +34,39 @@
 /* used for word definitions */
 
 #rikaichan-window .w-kanji {
-	font-size: 18px;
 	color: #B7E7FF;
 	margin-right: 0.7em;
 }
 
 #rikaichan-window .w-kana {
-	font-size: 18px;
+	/*font-size: 18px;*/
 	color: #C0FFC0;
 }
 
 #rikaichan-window .w-conj {
 	color: #FFE0A0;
-	font-size: 12px;
 }
 
 #rikaichan-window .w-freq-very-common {
 	color: #00FF00;
-	font-size: 12px;
 }
 
 #rikaichan-window .w-freq-common {
 	color: #FFFF00;
-	font-size: 12px;
 }
 
 #rikaichan-window .w-freq-uncommon {
 	color: #FFA500;
-	font-size: 12px;
 }
 
 #rikaichan-window .w-freq-rare {
 	color: #e28cbb;
-	font-size: 12px;
 }
 
 #rikaichan-window .w-def {
-	font-size: 13px;
 }
 
 #rikaichan-window .w-title {
-	font-size: 10px;
 	padding: 2px;
 	background: #4C63A8;
 	color: #FFFFFF;
@@ -93,18 +85,17 @@
 
 #rikaichan-window .k-kanji {
 	font-family: serif;
-	font-size: 48px;
 	color: #B7E7FF;
 }
 
 #rikaichan-window .k-eigo {
-	font-size: 12px;
+
 }
 
 /* kanji: readings */
 
 #rikaichan-window .k-yomi {
-	font-size: 14px;
+
 	color: #C0FFC0;
 	margin: 4px 0px;
 }
@@ -115,7 +106,7 @@
 }
 
 #rikaichan-window .k-yomi-ti {
-	font-size: 11px;
+
 	color: #E7FFE7;
 }
 
@@ -129,7 +120,6 @@
 }
 
 #rikaichan-window .k-abox-r {
-	font-size: 12px;
 	text-align: center;
 	padding: 1px 4px;
 	background: #5A70B5;
@@ -137,7 +127,7 @@
 }
 
 #rikaichan-window .k-abox-g {
-	font-size: 12px;
+
 	text-align: center;
 	padding: 1px 4px;
 	background: #4C63A8;
@@ -145,7 +135,7 @@
 }
 
 #rikaichan-window .k-abox-f {
-	font-size: 12px;
+
 	text-align: center;
 	padding: 1px 4px;
 	background: #4C63A8;
@@ -153,7 +143,7 @@
 }
 
 #rikaichan-window .k-abox-s {
-	font-size: 12px;
+
 	text-align: center;
 	padding: 1px 4px;
 	background: #5A70B5;
@@ -171,7 +161,7 @@
 
 #rikaichan-window .k-bbox-0a {
 	vertical-align: top;
-	font-size: 11px;
+
 	padding: 1px 3px;
 	background: #5A70B5;
 	color: #FFFFFF;
@@ -179,7 +169,7 @@
 
 #rikaichan-window .k-bbox-0b {
 	vertical-align: top;
-	font-size: 11px;
+
 	padding: 1px 3px;
 	background: #5A70B5;
 	color: #FFFFFF;
@@ -187,7 +177,7 @@
 
 #rikaichan-window .k-bbox-1a {
 	vertical-align: top;
-	font-size: 11px;
+
 	padding: 1px 3px;
 	background: #4C63A8;
 	color: #B7E7FF;
@@ -195,7 +185,7 @@
 
 #rikaichan-window .k-bbox-1b {
 	vertical-align: top;
-	font-size: 11px;
+
 	padding: 1px 3px;
 	background: #4C63A8;
 	color: #B7E7FF;
@@ -209,13 +199,13 @@
 }
 
 #rikaichan-window .k-mix-td0 {
-	font-size: 12px;
+
 	background: #5A70B5;
 	color: #B7E7FF;
 }
 
 #rikaichan-window .k-mix-td1 {
-	font-size: 12px;
+
 	background: #4C63A8;
 	color: #FFFFFF;
 }
@@ -244,13 +234,13 @@
 #rikaichan-window .epwing-dic-name 
 {
 	color: #FFE0A0;
-	font-size: 12px;
+
   float: right;
 }
 
 #rikaichan-window sup
 {
-  font-size: 10px;
+
 }
 
 #rikaichan-window hr

@@ -1,0 +1,36 @@
+{
+    "manifest_version": 2,
+    "name": "Rikaidono",
+    "version": "0.1.0",
+
+    "description": "Japanese popup dictionary with Anki integration",
+    "icons": {"16": "skin/classic/smile.png"},
+
+
+    "author": "EugeneG",
+    "background": {
+        "scripts": ["jedict.js"]
+    },
+    "content_scripts": [{
+        "matches": ["http://*/*", "https://*/*", "file://*/*"],
+        "js": [
+            "deinflect.js",
+			"config.js",
+			"data.js",
+			"options.js",
+			"rikaichan.js",
+			"jedict.js"
+        ],
+        "css": ["skin/classic/popup-blue.css"],
+        "all_frames": true
+    }],
+    "minimum_chrome_version": "57.0.0.0",
+
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "applications": {
+        "gecko": {
+            "id": "eu.gorbachev@gmail.com",
+            "strict_min_version": "52.0"
+        }
+    }
+}

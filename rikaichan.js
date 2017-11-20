@@ -527,6 +527,7 @@ var rcxMain = {
           // when zoomed, convert to zoomed document pixel position
           // - not in TB compose and ...?
           try {
+            var cb = this.getBrowser();
             var z = cb.fullZoom || 1;
             if (z != 1) {
               x = Math.round(x / z);
@@ -534,7 +535,7 @@ var rcxMain = {
             }
           }
           catch (ex) {
-            // console.log('ex: ' + ex)
+             console.log('ex: ' + ex)
           }
 
           if (false && elem instanceof Components.interfaces.nsIDOMHTMLOptionElement) {
@@ -3717,8 +3718,10 @@ var rcxMain = {
 		var ro = -1;
 		if(document.caretRangeFromPoint) {  // Webkit
 			const rrange = document.caretRangeFromPoint(ev.x, ev.y);
-			rp = rrange.startContainer;
-			ro = rrange.startOffset;
+			if(rrange) {
+				rp = rrange.startContainer;
+				ro = rrange.startOffset;
+			}
 		} else {                           // Mozilla
 			rp = ev.rangeParent;
 			ro = ev.rangeOffset;
